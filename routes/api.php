@@ -5,12 +5,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\LikesController;
+use App\Http\Controllers\MessagesController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::prefix('v1') -> group(function(){
+Route::prefix('v1') -> group(callback: function(){
 
 ///mengatur routing untuk posts
     Route::prefix('posts')->group(function () {
@@ -31,7 +32,13 @@ Route::prefix('v1') -> group(function(){
 //menghandle likes
     Route::prefix('likes')->group(function () {
         Route::post('/',[LikesController::class, 'store']);//menyukai post
-        Route::delete('{id}',[LikessController::class, 'destroy']);//menghapus like berdasarkan id
+        Route::delete('{id}',[LikesController::class, 'destroy']);//menghapus like berdasarkan id
     });
 
+//menghandle messages
+    Route::prefix('messages')->group(function () {
+        Route::post('/',[MessagesController::class, 'store']);//mengirim pesan
+        Route::get('{id}',[MessagesController::class, 'show']);//menampilkan pesan berdasarkan user_id
+        Route::delete('{id}',[MessagesController::class, 'destroy']);//menghapus pesan berdasarkan id
+    });
 });
