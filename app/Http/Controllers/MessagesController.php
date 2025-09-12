@@ -55,6 +55,22 @@ class MessagesController extends Controller
         }
     }
 
+    public function getMessage(int $user_id)
+    {
+      $messages = Message::where('receiver_id', $user_id)->get();
+    
+      return response()->json([
+          'success' => true,
+          'message' => 'Messages retrieved successfully',
+          'data' => $messages
+      ], 200);
+    
+    }
+    
+
+
+
+
     public function destroy(int $id)
     {
         Message::destroy($id);
@@ -63,5 +79,7 @@ class MessagesController extends Controller
             'message' => 'Message deleted successfully'
         ], 200);        
     }   
+
+
 }
 
