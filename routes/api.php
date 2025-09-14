@@ -7,17 +7,18 @@ use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\LikesController;
 use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\JWTAuthController;
+use App\Http\Middleware\JWTMiddleware;
 
 
 Route::prefix('v1') -> group(callback: function(){
 
 //handle authentication
     Route::post('register', [JWTAuthController::class, 'register']);
-    Route::post('login', [App\Http\Controllers\JWTAuthController::class, 'login']);
-    Route::post('logout', [App\Http\Controllers\JWTAuthController::class, 'logout'])->middleware('auth:api');
+    Route::post('login', [JWTAuthController::class, 'login']);
+    Route::post('logout', [JWTAuthController::class, 'logout'])->middleware('auth:api');
 
-///mengatur routing untuk posts
-    Route::prefix('posts')->group(function () {
+///mengatur routing untuk posts -> (menambahkan middleware JWTMiddleware)
+    Route::middleware(JWTMiddleware::class)->prefix('posts')->group(function () {
         Route::get('/',[PostsController::class, 'index']);// menampilkan semua data
         Route::post('/',[PostsController::class, 'store']);// menyimpan data
         Route::get('/{id}',[PostsController::class, 'show']);// menampilkan data berdasarkan id
