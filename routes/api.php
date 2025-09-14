@@ -6,12 +6,18 @@ use App\Http\Controllers\PostsController;
 use App\Http\Controllers\CommentsController;
 use App\Http\Controllers\LikesController;
 use App\Http\Controllers\MessagesController;
+use App\Http\Controllers\JWTAuthController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
 Route::prefix('v1') -> group(callback: function(){
+
+//handle authentication
+    Route::post('register', [JWTAuthController::class, 'register']);
+    Route::post('login', [App\Http\Controllers\JWTAuthController::class, 'login']);
+    Route::post('logout', [App\Http\Controllers\JWTAuthController::class, 'logout'])->middleware('auth:api');
 
 ///mengatur routing untuk posts
     Route::prefix('posts')->group(function () {
