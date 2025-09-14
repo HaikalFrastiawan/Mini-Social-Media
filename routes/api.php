@@ -27,7 +27,7 @@ Route::prefix('v1') -> group(callback: function(){
         });
 
 //Menghandlde routing untuk comments
-    Route::prefix('comments')->group(function () {
+    Route::middleware(JWTMiddleware::class)->prefix('comments')->group(function () {
         Route::post('/',[CommentsController::class, 'store']);// menampilkan semua data
         Route::delete('{id}',[CommentsController::class, 'destroy']);//menghapus data berdasarkan id
 
@@ -40,7 +40,7 @@ Route::prefix('v1') -> group(callback: function(){
     });
 
 //menghandle messages
-    Route::prefix('messages')->group(function () {
+    Route::middleware(JWTMiddleware::class)->prefix('messages')->group(function () {
         Route::post('/',[MessagesController::class, 'store']);//mengirim pesan
         
         Route::get('{id}',[MessagesController::class, 'show']);//menampilkan pesan berdasarkan user_id
